@@ -37,6 +37,8 @@ class _RoutingServiceState extends State<RoutingService> {
         controller: _pageController,
       ),
       bottomNavigationBar: BottomNavyBar(
+        topLeftRadius: 25,
+        topRightRadius: 25,
         selectedIndex: _selectedPage,
         onItemSelected: (index) => setState(() {
           _selectedPage = index;
