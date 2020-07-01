@@ -1,7 +1,13 @@
 import 'package:boundless_arts/constants.dart';
+import 'package:boundless_arts/screens/result_page.dart';
+import 'package:boundless_arts/services/networking.dart';
 import 'package:boundless_arts/util/size_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:ui';
+import 'dart:math';
+import 'dart:async';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -10,6 +16,41 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage> {
   final _controller = TextEditingController();
+  List<String> imageUrl = [];
+  List searchData = [];
+  bool show = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    print('home getData was called');
+    NetworkHelper networkHelper = NetworkHelper(
+        'http://api.unsplash.com/search/photos/?client_id=',
+        kAccessKey,
+        '&query=${categoryName[0]}');
+
+    print('category ${categoryName[0]}');
+    var searchData1 = await networkHelper.getData();
+    searchData = searchData1['results'];
+    print('photo length - ${searchData.length}');
+    print('$searchData');
+    _assign();
+    setState(() {
+      show = true;
+    });
+  }
+
+  _assign() {
+    for (int i = 0; i < searchData.length; i++) {
+      imageUrl.add(searchData.elementAt(i)['urls']['regular']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -89,9 +130,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
               child: Flexible(
             child: GridView.count(
               crossAxisCount: 3,
-              children: (List.generate(18, (index) {
+              children: (List.generate(categoryName.length, (index) {
                 return FlatButton(
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ResultsPage(imageUrl);
+                    }));
+                  },
                   child: Container(
                     height: SizeConfig.safeHeight * 0.4,
                     child: Column(
@@ -100,15 +146,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           child: Container(
                             width: SizeConfig.safeWidth * 0.23,
                             height: SizeConfig.safeHeight * 0.13,
-                            child: Image(
-                              image: NetworkImage(
-                                'http://via.placeholder.com/350x150',
-                              ),
-                              fit: BoxFit.fill,
-                            ),
+                            child: !show
+                                ? CircularProgressIndicator()
+                                : Image(
+                                    image: NetworkImage(
+                                      '${imageUrl.elementAt(0)}',
+                                    ),
+                                    fit: BoxFit.fill,
+                                  ),
                           ),
                         ),
-                        Text('category'),
+                        Text(categoryName[index]),
                       ],
                     ),
                   ),

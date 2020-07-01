@@ -22,13 +22,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
+//    getData();
   }
 
   void getData() async {
     print('home getData was called');
-    NetworkHelper networkHelper =
-        NetworkHelper('http://api.unsplash.com/photos/?client_id=', kAccessKey);
+    NetworkHelper networkHelper = NetworkHelper(
+        'http://api.unsplash.com/photos/?client_id=', kAccessKey, '');
 
     photosData = await networkHelper.getData();
     print('photo length - ${photosData.length}');

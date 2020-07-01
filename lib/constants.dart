@@ -7,3 +7,24 @@ const kPrimaryColor = Colors.white;
 const kSecondaryColor = Colors.redAccent;
 const kInactiveColor = Colors.blueAccent;
 const kTertiaryColor = Colors.black;
+
+List categoryName = <String>[
+  'Mountains',
+  'People',
+  'Wildlife',
+  'Scenery',
+  'Birds',
+  'Sky',
+  'Animals',
+  'Sports',
+  'Portrait',
+  'B&W',
+  'Candid',
+  'Cityscape',
+  'Adventure',
+  'Drone',
+  'Event',
+  'Film',
+  'Fine Art',
+  'Food'
+];
