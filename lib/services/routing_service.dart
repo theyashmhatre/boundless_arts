@@ -53,8 +53,8 @@ class _RoutingServiceState extends State<RoutingService> {
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
+            icon: Icon(Icons.grid_on),
+            title: Text('Feed'),
             activeColor: kSecondaryColor,
             inactiveColor: kInactiveColor,
             textAlign: TextAlign.center,
