@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     padding:
-                                        EdgeInsets.all(SizeConfig.scaleText(3)),
+                                        EdgeInsets.all(SizeConfig.scaleText(6)),
                                   ),
                                   margin: EdgeInsets.only(
                                       bottom: SizeConfig.safeHeight * 0.02),
@@ -181,33 +181,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-//ListView.builder(
-//scrollDirection: Axis.horizontal,
-//itemCount: photosData.length,
-//itemBuilder: (BuildContext context, int index) {
-//return Container(
-//decoration: BoxDecoration(
-//borderRadius: BorderRadius.all(Radius.circular(20)),
-//),
-//child: !showing
-//? CircularProgressIndicator()
-//    : Stack(
-//alignment: Alignment.center,
-//children: <Widget>[
-//Image(
-//image:
-//NetworkImage(imgUrl.elementAt(index)),
-//fit: BoxFit.fill,
-//height: SizeConfig.safeHeight * 0.6,
-//),
-//Container(
-//padding: EdgeInsets.symmetric(
-//vertical: 10, horizontal: 5),
-//child: Text(description.elementAt(index)),
-//),
-//],
-//),
-//);
-//},
-//),

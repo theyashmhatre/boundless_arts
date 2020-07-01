@@ -14,9 +14,9 @@ class RoutingService extends StatefulWidget {
 
 class _RoutingServiceState extends State<RoutingService> {
   final _myPages = [
+    CategoriesPage(),
     HomePage(),
     SearchPage(),
-    CategoriesPage(),
     ProfilePage(),
   ];
 
