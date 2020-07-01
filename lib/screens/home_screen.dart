@@ -56,10 +56,17 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: SizeConfig.safeHeight * 0.05),
             height: SizeConfig.safeHeight * 0.25,
             decoration: BoxDecoration(
-                color: kSecondaryColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
+              color: kSecondaryColor,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              boxShadow: [
+                new BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: 12,
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
