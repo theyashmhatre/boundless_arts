@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:boundless_arts/screens/categories_page.dart';
 import 'package:boundless_arts/screens/profile_page.dart';
-
 import 'package:boundless_arts/screens/search_page.dart';
 import 'package:boundless_arts/screens/home_screen.dart';
 
@@ -42,6 +41,8 @@ class _RoutingServiceState extends State<RoutingService> {
         selectedIndex: _selectedPage,
         onItemSelected: (index) => setState(() {
           _selectedPage = index;
+          _pageController.animateToPage(_selectedPage,
+              duration: Duration(milliseconds: 300), curve: Curves.linear);
         }),
         animationDuration: Duration(milliseconds: 400),
         items: <BottomNavyBarItem>[
