@@ -67,6 +67,8 @@ class _ResultsPageState extends State<ResultsPage> {
             color: kTertiaryColor,
             fontWeight: FontWeight.bold,
             fontSize: SizeConfig.scaleText(22),
+            fontFamily: 'Acme',
+            letterSpacing: 1,
           ),
         ),
       ),
@@ -116,7 +118,13 @@ class _ResultsPageState extends State<ResultsPage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(40))),
                         child: IconButton(
-                          icon: Icon(Icons.grid_on),
+                          icon: ImageIcon(
+                            AssetImage('assets/images/grid2.png'),
+                            size: 20,
+                            color: selectedWidget == WidgetMarker.grid2
+                                ? kActiveIcon
+                                : kInactiveIcon,
+                          ),
                           iconSize: 20,
                           onPressed: () {
                             setState(() {

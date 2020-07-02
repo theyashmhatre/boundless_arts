@@ -95,13 +95,15 @@ class _HomePageState extends State<HomePage> {
                         'Welcome to',
                         style: TextStyle(
                           fontSize: SizeConfig.scaleText(20),
+                          fontFamily: 'Bitter',
                         ),
                       ),
                       Text(
                         'Boundless Arts',
                         style: TextStyle(
-                          fontSize: SizeConfig.scaleText(26),
+                          fontSize: SizeConfig.scaleText(28),
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Berkshire',
                         ),
                       ),
                     ],

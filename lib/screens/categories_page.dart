@@ -20,37 +20,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
   String inputValue;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getData();
-  }
-
-  void getData() async {
-    print('home getData was called');
-    NetworkHelper networkHelper = NetworkHelper(
-        'http://api.unsplash.com/search/photos/?client_id=',
-        kAccessKey,
-        '&query=${categoryName[0]}');
-
-    print('category ${categoryName[0]}');
-    var searchData1 = await networkHelper.getData();
-    searchData = searchData1['results'];
-    print('photo length - ${searchData.length}');
-    print('$searchData');
-    _assign();
-    setState(() {
-      show = true;
-    });
-  }
-
-  _assign() {
-    for (int i = 0; i < searchData.length; i++) {
-      imageUrl.add(searchData.elementAt(i)['urls']['regular']);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
@@ -78,8 +47,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   'Categories',
                   style: TextStyle(
                     color: kTertiaryColor,
-                    fontSize: SizeConfig.scaleText(20),
+                    fontSize: SizeConfig.scaleText(22),
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Acme',
+                    letterSpacing: 1,
                   ),
                 ),
                 Container(
@@ -141,36 +112,36 @@ class _CategoriesPageState extends State<CategoriesPage> {
           Container(
               child: Flexible(
             child: GridView.count(
+              mainAxisSpacing: 1,
+              crossAxisSpacing: 5,
               crossAxisCount: 3,
               children: (List.generate(categoryName.length, (index) {
-                return FlatButton(
-                  onPressed: () {
+                return GestureDetector(
+                  onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ResultsPage(
                           categoryNamePressed: categoryName[index]);
                     }));
                   },
-                  child: Container(
-                    height: SizeConfig.safeHeight * 0.4,
-                    child: Column(
-                      children: <Widget>[
-                        Card(
-                          child: Container(
-                            width: SizeConfig.safeWidth * 0.23,
-                            height: SizeConfig.safeHeight * 0.13,
-                            child: !show
-                                ? CircularProgressIndicator()
-                                : Image(
-                                    image: NetworkImage(
-                                      '${imageUrl.elementAt(0)}',
-                                    ),
-                                    fit: BoxFit.fill,
-                                  ),
-                          ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Container(
+                      height: SizeConfig.safeHeight * 0.1,
+                      width: SizeConfig.safeWidth * 0.4,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [kTertiaryColor, Color(0xFF090909)]),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Center(
+                          child: Text(
+                        categoryName[index],
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontFamily: 'Bitter',
                         ),
-                        Text(categoryName[index]),
-                      ],
+                      )),
                     ),
                   ),
                 );
