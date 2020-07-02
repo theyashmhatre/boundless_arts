@@ -8,6 +8,11 @@ const kSecondaryColor = Colors.redAccent;
 const kInactiveColor = Colors.blueAccent;
 const kTertiaryColor = Colors.black;
 
+const kActiveContainer = Colors.black;
+const kInactiveContainer = Colors.grey;
+const kActiveIcon = kSecondaryColor;
+const kInactiveIcon = Colors.white;
+
 List categoryName = <String>[
   'Mountains',
   'People',

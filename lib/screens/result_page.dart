@@ -1,16 +1,244 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:boundless_arts/services/networking.dart';
+import 'package:boundless_arts/constants.dart';
+import 'package:boundless_arts/util/size_util.dart';
 
-class ResultsPage extends StatelessWidget {
-  ResultsPage(this.imageUrl);
-  final List<String> imageUrl;
+enum WidgetMarker { list, grid2, grid3 }
+
+class ResultsPage extends StatefulWidget {
+  ResultsPage({this.categoryNamePressed});
+  final String categoryNamePressed;
+
+  @override
+  _ResultsPageState createState() => _ResultsPageState();
+}
+
+class _ResultsPageState extends State<ResultsPage> {
+  List<String> imageUrl = [];
+  List listPhotos = [];
+  bool show = false;
+  List<String> description = [];
+  WidgetMarker selectedWidget = WidgetMarker.list;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    print('home getData was called');
+    NetworkHelper networkHelper = NetworkHelper(
+        'http://api.unsplash.com/search/photos/?client_id=',
+        kAccessKey,
+        '&query=${widget.categoryNamePressed}');
+
+    print('category $categoryName');
+    var searchData1 = await networkHelper.getData();
+    listPhotos = searchData1['results'];
+    print('photo length - ${listPhotos.length}');
+    print('$listPhotos');
+    _assign();
+    setState(() {
+      show = true;
+    });
+  }
+
+  _assign() {
+    for (int i = 0; i < listPhotos.length; i++) {
+      imageUrl.add(listPhotos.elementAt(i)['urls']['regular']);
+      description.add(listPhotos.elementAt(i)['alt_description']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
-      body: ListView.builder(itemBuilder: (BuildContext context, int index) {
-        return Container(
-          child: Image(image: NetworkImage(imageUrl[index])),
-        );
-      }),
+      appBar: AppBar(
+        backgroundColor: kSecondaryColor,
+        centerTitle: true,
+        title: Text('${widget.categoryNamePressed}'),
+      ),
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: SizeConfig.safeHeight * 0.01),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(40))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                            color: selectedWidget == WidgetMarker.list
+                                ? kActiveContainer
+                                : kInactiveContainer,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40))),
+                        child: IconButton(
+                          icon: Icon(Icons.photo),
+                          iconSize: 20,
+                          onPressed: () {
+                            setState(() {
+                              selectedWidget = WidgetMarker.list;
+                            });
+                          },
+                          splashColor: Colors.cyan,
+                          color: selectedWidget == WidgetMarker.list
+                              ? kActiveIcon
+                              : kInactiveIcon,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: selectedWidget == WidgetMarker.grid2
+                                ? kActiveContainer
+                                : kInactiveContainer,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40))),
+                        child: IconButton(
+                          icon: Icon(Icons.grid_on),
+                          iconSize: 20,
+                          onPressed: () {
+                            setState(() {
+                              selectedWidget = WidgetMarker.grid2;
+                            });
+                          },
+                          color: selectedWidget == WidgetMarker.grid2
+                              ? kActiveIcon
+                              : kInactiveIcon,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: selectedWidget == WidgetMarker.grid3
+                                ? kActiveContainer
+                                : kInactiveContainer,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40))),
+                        child: IconButton(
+                          icon: Icon(Icons.grid_on),
+                          iconSize: 20,
+                          onPressed: () {
+                            setState(() {
+                              selectedWidget = WidgetMarker.grid3;
+                            });
+                          },
+                          color: selectedWidget == WidgetMarker.grid3
+                              ? kActiveIcon
+                              : kInactiveIcon,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: SizeConfig.safeWidth * 0.03),
+              ],
+            ),
+          ),
+          Container(
+            child: getCustomContainer(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getCustomContainer() {
+    switch (selectedWidget) {
+      case WidgetMarker.list:
+        return getListContainer();
+      case WidgetMarker.grid2:
+        return get2GridContainer();
+      case WidgetMarker.grid3:
+        return get3GridContainer();
+    }
+    return getListContainer();
+  }
+
+  Widget getListContainer() {
+    return Expanded(
+      child: ListView.separated(
+          itemCount: imageUrl.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return Container(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.safeHeight * 0.04),
+                ],
+              ),
+            );
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+              child: !show
+                  ? CircularProgressIndicator()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: Image(image: NetworkImage(imageUrl[index]))),
+            );
+          }),
+    );
+  }
+
+  Widget get2GridContainer() {
+    return Expanded(
+      child: GridView.count(
+        crossAxisCount: 2,
+        children: (List.generate(categoryName.length, (index) {
+          return Container(
+            padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+            child: !show
+                ? CircularProgressIndicator()
+                : ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: Image(
+                      image: NetworkImage(imageUrl[index]),
+                      fit: BoxFit.cover,
+                    )),
+          );
+        })),
+      ),
+    );
+  }
+
+  Widget get3GridContainer() {
+    return Expanded(
+      child: GridView.count(
+        crossAxisCount: 3,
+        children: (List.generate(categoryName.length, (index) {
+          return Container(
+            padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+            child: !show
+                ? CircularProgressIndicator()
+                : ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Image(
+                      image: NetworkImage(imageUrl[index]),
+                      fit: BoxFit.cover,
+                    )),
+          );
+        })),
+      ),
     );
   }
 }

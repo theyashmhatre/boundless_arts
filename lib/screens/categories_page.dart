@@ -135,7 +135,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return ResultsPage(imageUrl);
+                      return ResultsPage(
+                          categoryNamePressed: categoryName[index]);
                     }));
                   },
                   child: Container(
