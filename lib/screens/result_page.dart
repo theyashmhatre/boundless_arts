@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:boundless_arts/services/networking.dart';
 import 'package:boundless_arts/constants.dart';
 import 'package:boundless_arts/util/size_util.dart';
+import 'full_screen_image.dart';
 
 enum WidgetMarker { list, grid2, grid3 }
 
@@ -181,28 +182,47 @@ class _ResultsPageState extends State<ResultsPage> {
           itemCount: imageUrl.length,
           separatorBuilder: (BuildContext context, int index) {
             return Container(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.safeHeight * 0.04),
-                ],
-              ),
+              child: SizedBox(height: SizeConfig.safeHeight * 0.01),
             );
           },
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
-              child: !show
-                  ? CircularProgressIndicator()
-                  : ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      child: Image(image: NetworkImage(imageUrl[index]))),
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return FullScreenImage(
+                    url: imageUrl[index],
+                  );
+                }));
+              },
+              child: Container(
+                padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: !show
+                      ? CircularProgressIndicator()
+                      : Column(
+                          children: <Widget>[
+                            ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20)),
+                                child: Image(
+                                    image: NetworkImage(imageUrl[index]))),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ),
             );
           }),
     );
@@ -213,16 +233,25 @@ class _ResultsPageState extends State<ResultsPage> {
       child: GridView.count(
         crossAxisCount: 2,
         children: (List.generate(categoryName.length, (index) {
-          return Container(
-            padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
-            child: !show
-                ? CircularProgressIndicator()
-                : ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    child: Image(
-                      image: NetworkImage(imageUrl[index]),
-                      fit: BoxFit.cover,
-                    )),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FullScreenImage(
+                  url: imageUrl[index],
+                );
+              }));
+            },
+            child: Container(
+              padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+              child: !show
+                  ? CircularProgressIndicator()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: Image(
+                        image: NetworkImage(imageUrl[index]),
+                        fit: BoxFit.cover,
+                      )),
+            ),
           );
         })),
       ),
@@ -234,16 +263,25 @@ class _ResultsPageState extends State<ResultsPage> {
       child: GridView.count(
         crossAxisCount: 3,
         children: (List.generate(categoryName.length, (index) {
-          return Container(
-            padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
-            child: !show
-                ? CircularProgressIndicator()
-                : ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: Image(
-                      image: NetworkImage(imageUrl[index]),
-                      fit: BoxFit.cover,
-                    )),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FullScreenImage(
+                  url: imageUrl[index],
+                );
+              }));
+            },
+            child: Container(
+              padding: EdgeInsets.all(SizeConfig.safeWidth * 0.02),
+              child: !show
+                  ? CircularProgressIndicator()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Image(
+                        image: NetworkImage(imageUrl[index]),
+                        fit: BoxFit.cover,
+                      )),
+            ),
           );
         })),
       ),
