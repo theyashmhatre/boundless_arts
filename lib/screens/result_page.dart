@@ -60,7 +60,14 @@ class _ResultsPageState extends State<ResultsPage> {
       appBar: AppBar(
         backgroundColor: kSecondaryColor,
         centerTitle: true,
-        title: Text('${widget.categoryNamePressed}'),
+        title: Text(
+          '${widget.categoryNamePressed[0].toUpperCase()}${widget.categoryNamePressed.substring(1)}',
+          style: TextStyle(
+            color: kTertiaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: SizeConfig.scaleText(22),
+          ),
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -147,6 +154,7 @@ class _ResultsPageState extends State<ResultsPage> {
               ],
             ),
           ),
+          SizedBox(height: 9),
           Container(
             child: getCustomContainer(),
           ),

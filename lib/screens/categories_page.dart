@@ -6,8 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui';
-import 'dart:math';
-import 'dart:async';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -19,6 +17,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   List<String> imageUrl = [];
   List searchData = [];
   bool show = false;
+  String inputValue;
 
   @override
   void initState() {
@@ -90,7 +89,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     children: <Widget>[
                       Flexible(
                         child: TextField(
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              inputValue = value;
+                            });
+                          },
                           controller: _controller,
                           decoration: InputDecoration(
                               hintText: 'Search your keyword...',
@@ -104,7 +107,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       ),
                       SizedBox(width: SizeConfig.safeWidth * 0.02),
                       Container(
-                        padding: EdgeInsets.all(SizeConfig.safeWidth * 0.028),
+                        width: SizeConfig.safeWidth * 0.15,
                         decoration: BoxDecoration(
                             border: Border.all(width: 1),
                             boxShadow: [
@@ -115,9 +118,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
                             ],
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10))),
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.white,
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ResultsPage(
+                                  categoryNamePressed: inputValue);
+                            }));
+                          },
+                          child: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

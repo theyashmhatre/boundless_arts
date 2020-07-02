@@ -16,7 +16,7 @@ class NetworkHelper {
     http.Response response =
         await http.get('$url$kAccessKey&per_page=30&page=1$query');
     print('query $query');
-    ;
+
     if (response.statusCode == 200) {
       String data = response.body;
       var decodedData = jsonDecode(data);

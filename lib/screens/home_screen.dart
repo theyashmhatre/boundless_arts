@@ -1,4 +1,3 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:boundless_arts/constants.dart';
 import 'package:boundless_arts/util/size_util.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:boundless_arts/services/networking.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui';
-import 'dart:math';
+import 'package:boundless_arts/screens/bottom_sheet.dart';
+import 'full_screen_image.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-//    getData();
+    getData();
   }
 
   void getData() async {
@@ -45,11 +45,26 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _onButtonPressed() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+          child: Container(
+        height: SizeConfig.safeHeight * 0.6,
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: BottomContainerSheet(),
+      )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Column(
         children: <Widget>[
           Container(
@@ -93,22 +108,31 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.all(SizeConfig.safeHeight * 0.01),
+                    width: SizeConfig.safeWidth * 0.17,
+                    height: SizeConfig.safeHeight * 0.07,
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.white10),
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.search,
-                      size: SizeConfig.safeHeight * 0.05,
-                      color: kPrimaryColor,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(2.0, 2.0),
+                            color: Colors.black87,
+                            blurRadius: 3.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                    child: FlatButton(
+                      color: kTertiaryColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      onPressed: () {
+                        _onButtonPressed();
+                      },
+                      child: Icon(
+                        Icons.search,
+                        size: SizeConfig.safeHeight * 0.05,
+                        color: kPrimaryColor,
+                      ),
                     )),
               ],
             ),
@@ -122,54 +146,64 @@ class _HomePageState extends State<HomePage> {
                   itemCount: photosData.length,
                   scale: 0.9,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: !showing
-                          ? CircularProgressIndicator()
-                          : Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image(
-                                    image:
-                                        NetworkImage(imgUrl.elementAt(index)),
-                                    fit: BoxFit.fill,
-                                    height: SizeConfig.safeHeight * 0.6,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 5),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(
-                                              SizeConfig.safeWidth * 0.03)),
-                                      color: Colors.black.withOpacity(0.5),
+                    return FlatButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return FullScreenImage(
+                            url: imgUrl[index],
+                          );
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: !showing
+                            ? CircularProgressIndicator()
+                            : Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image(
+                                      image:
+                                          NetworkImage(imgUrl.elementAt(index)),
+                                      fit: BoxFit.fill,
+                                      height: SizeConfig.safeHeight * 0.6,
                                     ),
-                                    child: Text(
-                                      '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.white.withOpacity(1),
-                                        fontSize: SizeConfig.scaleText(15),
-                                        fontStyle: FontStyle.italic,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(
+                                                SizeConfig.safeWidth * 0.03)),
+                                        color: Colors.black.withOpacity(0.5),
                                       ),
+                                      child: Text(
+                                        '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(1),
+                                          fontSize: SizeConfig.scaleText(15),
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(
+                                          SizeConfig.scaleText(6)),
                                     ),
-                                    padding:
-                                        EdgeInsets.all(SizeConfig.scaleText(6)),
+                                    margin: EdgeInsets.only(
+                                        bottom: SizeConfig.safeHeight * 0.02),
+                                    alignment: Alignment.bottomCenter,
                                   ),
-                                  margin: EdgeInsets.only(
-                                      bottom: SizeConfig.safeHeight * 0.02),
-                                  alignment: Alignment.bottomCenter,
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                      ),
                     );
                   },
                   viewportFraction: 0.8,

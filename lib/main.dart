@@ -1,7 +1,5 @@
-import 'package:boundless_arts/screens/home_screen.dart';
 import 'package:boundless_arts/services/routing_service.dart';
 import 'package:flutter/material.dart';
-import 'package:boundless_arts/util/size_util.dart';
 
 void main() {
   runApp(MyApp());
