@@ -145,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                   loop: false,
                   itemCount: photosData.length,
                   scale: 0.9,
+                  control: SwiperControl(),
                   itemBuilder: (BuildContext context, int index) {
                     return FlatButton(
                       onPressed: () {
@@ -168,9 +169,9 @@ class _HomePageState extends State<HomePage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: Image(
-                                      image:
-                                          NetworkImage(imgUrl.elementAt(index)),
-                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                          '${imgUrl.elementAt(index)}'),
+                                      fit: BoxFit.cover,
                                       height: SizeConfig.safeHeight * 0.6,
                                     ),
                                   ),
@@ -206,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   },
-                  viewportFraction: 0.8,
+                  viewportFraction: 0.9,
                   itemHeight: SizeConfig.safeWidth * 0.5,
                   itemWidth: SizeConfig.safeWidth * 0.5,
                 )),
