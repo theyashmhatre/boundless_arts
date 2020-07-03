@@ -5,7 +5,7 @@ import 'package:boundless_arts/constants.dart';
 import 'package:boundless_arts/util/size_util.dart';
 import 'full_screen_image.dart';
 
-enum WidgetMarker { list, grid2, grid3 }
+enum WidgetMarker { list, grid2, grid3 } // for changing list to grids
 
 class ResultsPage extends StatefulWidget {
   ResultsPage({this.categoryNamePressed});
@@ -24,7 +24,6 @@ class _ResultsPageState extends State<ResultsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -76,6 +75,7 @@ class _ResultsPageState extends State<ResultsPage> {
         children: <Widget>[
           SizedBox(height: SizeConfig.safeHeight * 0.01),
           Container(
+            // options for list, grid and grid 3
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(20),
@@ -90,6 +90,7 @@ class _ResultsPageState extends State<ResultsPage> {
                   child: Row(
                     children: <Widget>[
                       Container(
+                        // list icon
                         decoration: BoxDecoration(
                             color: selectedWidget == WidgetMarker.list
                                 ? kActiveContainer
@@ -111,6 +112,7 @@ class _ResultsPageState extends State<ResultsPage> {
                         ),
                       ),
                       Container(
+                        //grid2 icon
                         decoration: BoxDecoration(
                             color: selectedWidget == WidgetMarker.grid2
                                 ? kActiveContainer
@@ -137,6 +139,7 @@ class _ResultsPageState extends State<ResultsPage> {
                         ),
                       ),
                       Container(
+                        //grid3 icon
                         decoration: BoxDecoration(
                             color: selectedWidget == WidgetMarker.grid3
                                 ? kActiveContainer
@@ -165,7 +168,7 @@ class _ResultsPageState extends State<ResultsPage> {
           ),
           SizedBox(height: 9),
           Container(
-            child: getCustomContainer(),
+            child: getCustomContainer(), //select container method
           ),
         ],
       ),

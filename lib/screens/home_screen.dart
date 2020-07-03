@@ -6,7 +6,7 @@ import 'package:boundless_arts/services/networking.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui';
 import 'package:boundless_arts/screens/bottom_sheet.dart';
-import 'full_screen_image.dart';
+import 'package:boundless_arts/widgets/swiper_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,10 +20,11 @@ class _HomePageState extends State<HomePage> {
   bool showing = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
+
+  //getData from network helper and make a list of urls
 
   void getData() async {
     print('home getData was called');
@@ -44,6 +45,8 @@ class _HomePageState extends State<HomePage> {
       description.add(photosData.elementAt(i)['alt_description']);
     }
   }
+
+  //HomeScreen bottomSheet container
 
   void _onButtonPressed() {
     showModalBottomSheet(
@@ -69,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(top: SizeConfig.safeHeight * 0.05),
-            height: SizeConfig.safeHeight * 0.25,
+            height: SizeConfig.safeHeight * 0.25, //top container height
             decoration: BoxDecoration(
               color: kSecondaryColor,
               borderRadius: BorderRadius.only(
@@ -82,6 +85,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+
+            //Welcome to boundless Arts text and search icon
+
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
@@ -141,78 +147,11 @@ class _HomePageState extends State<HomePage> {
           ),
           photosData == null
               ? CircularProgressIndicator()
-              : Expanded(
-                  child: Swiper(
-                  scrollDirection: Axis.horizontal,
-                  loop: false,
-                  itemCount: photosData.length,
-                  scale: 0.9,
-                  control: SwiperControl(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return FlatButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return FullScreenImage(
-                            url: imgUrl[index],
-                          );
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: !showing
-                            ? CircularProgressIndicator()
-                            : Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image(
-                                      image: NetworkImage(
-                                          '${imgUrl.elementAt(index)}'),
-                                      fit: BoxFit.cover,
-                                      height: SizeConfig.safeHeight * 0.6,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 5),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                                SizeConfig.safeWidth * 0.03)),
-                                        color: Colors.black.withOpacity(0.5),
-                                      ),
-                                      child: Text(
-                                        '${description.elementAt(index)[0].toUpperCase()}${description.elementAt(index).substring(1)}',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(1),
-                                          fontSize: SizeConfig.scaleText(15),
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                      ),
-                                      padding: EdgeInsets.all(
-                                          SizeConfig.scaleText(6)),
-                                    ),
-                                    margin: EdgeInsets.only(
-                                        bottom: SizeConfig.safeHeight * 0.02),
-                                    alignment: Alignment.bottomCenter,
-                                  ),
-                                ],
-                              ),
-                      ),
-                    );
-                  },
-                  viewportFraction: 0.9,
-                  itemHeight: SizeConfig.safeWidth * 0.5,
-                  itemWidth: SizeConfig.safeWidth * 0.5,
-                )),
+              : SwiperWidget(
+                  photosData: photosData,
+                  imgUrl: imgUrl,
+                  showing: showing,
+                  description: description),
         ],
       ),
     );
