@@ -27,7 +27,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(top: SizeConfig.safeHeight * 0.05),
-            height: SizeConfig.safeHeight * 0.2,
+            height: SizeConfig.safeHeight * 0.22,
             decoration: BoxDecoration(
               color: kSecondaryColor,
               borderRadius: BorderRadius.only(

@@ -13,15 +13,14 @@ class RoutingService extends StatefulWidget {
 
 class _RoutingServiceState extends State<RoutingService> {
   final _myPages = [
-    HomePage(),
-    SearchPage(),
     CategoriesPage(),
+    HomePage(),
     ProfilePage(),
   ];
 
-  int _selectedPage = 0;
+  int _selectedPage = 1;
   PageController _pageController = PageController();
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +46,6 @@ class _RoutingServiceState extends State<RoutingService> {
         animationDuration: Duration(milliseconds: 400),
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-            activeColor: kSecondaryColor,
-            inactiveColor: kInactiveColor,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
             icon: Icon(Icons.grid_on),
             title: Text('Feed'),
             activeColor: kSecondaryColor,
@@ -61,8 +53,8 @@ class _RoutingServiceState extends State<RoutingService> {
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.category),
-            title: Text('Category'),
+            icon: Icon(Icons.home),
+            title: Text('Home'),
             activeColor: kSecondaryColor,
             inactiveColor: kInactiveColor,
             textAlign: TextAlign.center,
