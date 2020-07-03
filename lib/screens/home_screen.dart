@@ -13,15 +13,28 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin<HomePage> {
   List<String> imgUrl = [];
   List<String> description = [];
   List photosData = [];
   bool showing = false;
+  double _scale;
+  AnimationController _controller;
+
   @override
   void initState() {
-    super.initState();
     getData();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+        setState(() {});
+      });
+
+    super.initState();
   }
 
   //getData from network helper and make a list of urls
@@ -64,6 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
     SizeConfig().init(context);
 
     return Scaffold(
@@ -115,33 +129,38 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Container(
-                    width: SizeConfig.safeWidth * 0.17,
-                    height: SizeConfig.safeHeight * 0.07,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(2.0, 2.0),
-                            color: Colors.black87,
-                            blurRadius: 3.0,
-                            spreadRadius: 1.0,
-                          ),
-                        ]),
-                    child: FlatButton(
-                      color: kTertiaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      onPressed: () {
+                GestureDetector(
+                  onTap: () {
+                    _controller.forward().then((val) {
+                      _controller.reverse().then((val) {
                         _onButtonPressed();
-                      },
-                      child: Icon(
-                        Icons.search,
-                        size: SizeConfig.safeHeight * 0.05,
-                        color: kPrimaryColor,
-                      ),
-                    )),
+                      });
+                    });
+                  },
+                  child: Transform.scale(
+                    scale: _scale,
+                    child: Container(
+                        width: SizeConfig.safeWidth * 0.17,
+                        height: SizeConfig.safeHeight * 0.07,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: kTertiaryColor.withOpacity(0.7),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            border: Border.all(width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black,
+                                blurRadius: 3,
+                                offset: Offset(0.2, 0.5),
+                              ),
+                            ]),
+                        child: Icon(
+                          Icons.search,
+                          size: SizeConfig.safeHeight * 0.05,
+                          color: kSecondaryColor,
+                        )),
+                  ),
+                ),
               ],
             ),
           ),

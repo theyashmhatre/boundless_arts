@@ -11,15 +11,33 @@ class CategoriesPage extends StatefulWidget {
   _CategoriesPageState createState() => _CategoriesPageState();
 }
 
-class _CategoriesPageState extends State<CategoriesPage> {
+class _CategoriesPageState extends State<CategoriesPage>
+    with TickerProviderStateMixin<CategoriesPage> {
+  double _scale;
+  AnimationController _controller;
   List searchData = [];
   bool show = false;
   String inputValue;
-  final _controller = TextEditingController();
+  final _controllerText = TextEditingController();
   List<String> imageUrl = [];
 
   @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+        setState(() {});
+      });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
     SizeConfig().init(context);
     return Scaffold(
       body: Column(
@@ -112,7 +130,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         inputValue = value;
                       });
                     },
-                    controller: _controller,
+                    controller: _controllerText,
                     decoration: InputDecoration(
                         hintText: 'Search your keyword...',
                         fillColor: kPrimaryColor,
@@ -123,27 +141,40 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ),
                 ),
                 SizedBox(width: SizeConfig.safeWidth * 0.02),
-                Container(
-                  width: SizeConfig.safeWidth * 0.15,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: kTertiaryColor,
-                          blurRadius: 0.1,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ResultsPage(categoryNamePressed: inputValue);
-                      }));
-                    },
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    _controller.forward().then((val) {
+                      _controller.reverse().then((val) {
+                        if (inputValue != null) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ResultsPage(
+                              categoryNamePressed: inputValue,
+                            );
+                          }));
+                        }
+                      });
+                    });
+                  },
+                  child: Transform.scale(
+                    scale: _scale,
+                    child: Container(
+                      padding: EdgeInsets.all(11),
+                      width: SizeConfig.safeWidth * 0.15,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: kTertiaryColor,
+                              blurRadius: 0.1,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: SizeConfig.scaleText(28),
+                      ),
                     ),
                   ),
                 ),

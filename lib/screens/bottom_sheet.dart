@@ -51,12 +51,14 @@ class _BottomContainerSheetState extends State<BottomContainerSheet> {
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 splashColor: Colors.grey,
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return ResultsPage(
-                      categoryNamePressed: inputValue,
-                    );
-                  }));
+                  if (inputValue != null) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ResultsPage(
+                        categoryNamePressed: inputValue,
+                      );
+                    }));
+                  }
                 },
                 child: Text(
                   'Search',
