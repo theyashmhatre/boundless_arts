@@ -130,6 +130,14 @@ class _CategoriesPageState extends State<CategoriesPage>
                         inputValue = value;
                       });
                     },
+                    onSubmitted: (value) {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ResultsPage(
+                          categoryNamePressed: inputValue,
+                        );
+                      }));
+                    },
                     controller: _controllerText,
                     decoration: InputDecoration(
                         hintText: 'Search your keyword...',

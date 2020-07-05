@@ -28,6 +28,14 @@ class _BottomContainerSheetState extends State<BottomContainerSheet> {
             Flexible(
               child: TextField(
                 autofocus: true,
+                onSubmitted: (value) {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return ResultsPage(
+                      categoryNamePressed: inputValue,
+                    );
+                  }));
+                },
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   setState(() {
