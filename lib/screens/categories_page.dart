@@ -131,7 +131,7 @@ class _CategoriesPageState extends State<CategoriesPage>
                       });
                     },
                     onSubmitted: (value) {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return ResultsPage(
                           categoryNamePressed: inputValue,
